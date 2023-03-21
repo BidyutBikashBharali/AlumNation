@@ -15,7 +15,7 @@ router = APIRouter()
 
 
 
-@router.post("/user/profile/")
+@router.get("/user/profile/")
 async def user_profile(user_id: str = Depends(oauth2.require_user)):
     try:
         client = cnct.client
@@ -38,7 +38,7 @@ async def user_profile(user_id: str = Depends(oauth2.require_user)):
 
 
 
-@router.post("/user/profile/{user_id}")
+@router.get("/user/profile/{user_id}")
 async def user_profile_by_id(user_id: str):
     try:
         client = cnct.client
@@ -117,7 +117,7 @@ async def user_profile_update(updated_data : schema.UserUpdateSchema, user_id: s
 
 
 
-@router.post("/user/profile/delete")
+@router.get("/user/profile/delete")
 async def user_profile_delete(user_id: str = Depends(oauth2.require_user)):
     try:
         client = cnct.client
@@ -162,7 +162,7 @@ async def user_profile_delete(user_id: str = Depends(oauth2.require_user)):
 
 
 
-@router.post("/admin/profile/")
+@router.get("/admin/profile/")
 async def admin_profile(admin_id: str = Depends(oauth2.require_admin)):
     try:
         client = cnct.client
@@ -183,7 +183,7 @@ async def admin_profile(admin_id: str = Depends(oauth2.require_admin)):
 
 
 
-@router.post("/admin/profile/{admin_id}")
+@router.get("/admin/profile/{admin_id}")
 async def admin_profile(admin_id: str):
     try:
         client = cnct.client
@@ -251,7 +251,7 @@ async def admin_profile_update(updated_data : schema.AdminUpdateSchema, admin_id
 
 
 
-@router.post("/admin/profile/delete")
+@router.get("/admin/profile/delete")
 async def admin_profile_delete(admin_id: str = Depends(oauth2.require_admin)):
     try:
         client = cnct.client

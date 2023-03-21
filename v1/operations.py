@@ -15,7 +15,7 @@ from .database import cnct
 from . import schema, oauth2
 from v1.serializers import userResponseEntity #, employeeResponseEntity
 
-from .analyser_Transformers import analyze_comments
+# from .analyser_Transformers import analyze_comments
 
 router = APIRouter()
 
@@ -47,7 +47,7 @@ async def shutdown_db_client():
     pass
 
 
-@router.post("/", tags=["Home"])
+@router.get("/", tags=["Home"])
 async def home():
     return {"status": "Welcome to zaboRRR :)"}
 
@@ -68,43 +68,43 @@ async def create_post(post : PostBaseSchema, user_id: str = Depends(oauth2.requi
         return {"status": "No such user exist!"}
     
 
-    sentences = re.split('(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)(\s|[A-Z].*)', post.content)
-    for s in sentences:
-        if s == ' ':
-            sentences.remove(' ')
+    # sentences = re.split('(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)(\s|[A-Z].*)', post.content)
+    # for s in sentences:
+    #     if s == ' ':
+    #         sentences.remove(' ')
 
-    # print(type(sentences))
-    # print(sentences)
+    # # print(type(sentences))
+    # # print(sentences)
 
         
-    sentiment_results, positive, negative, neutral = analyze_comments(sentences)
-    count = 0
-    results = []
-    sentiment_total = {"Positive" : positive, "Negative" : negative, "Neutral" : neutral}
-    results.append(sentiment_total)
+    # sentiment_results, positive, negative, neutral = analyze_comments(sentences)
+    # count = 0
+    # results = []
+    # sentiment_total = {"Positive" : positive, "Negative" : negative, "Neutral" : neutral}
+    # results.append(sentiment_total)
         
-    for sentence in sentences:
-        result = {}
-        result["sentence"] = sentence
-        result["sentiment"] = sentiment_results[count]["label"]
-        result["score"] = sentiment_results[count]["score"]
-        results.append(result)
-        # print(count)
-        count+=1
-    positive = results[0].get('Positive')
-    negative = results[0].get('Negative')
-    neutral = results[0].get('Neutral')
+    # for sentence in sentences:
+    #     result = {}
+    #     result["sentence"] = sentence
+    #     result["sentiment"] = sentiment_results[count]["label"]
+    #     result["score"] = sentiment_results[count]["score"]
+    #     results.append(result)
+    #     # print(count)
+    #     count+=1
+    # positive = results[0].get('Positive')
+    # negative = results[0].get('Negative')
+    # neutral = results[0].get('Neutral')
         
-    each_sentence_info_list = []
-    cnt = 0
-    for result in results[1:]:
-        if cnt == 8:
-            break
-        each_sentence_info_list.append(result)
-        # print(result)
-        cnt+=1
-    if negative > positive or negative > neutral:
-        return  {"message":"We are restricting this post since this post contains inappropiate or negative content", "each_sentence_info_list": each_sentence_info_list, "data": True, "positive" : positive, "negative" : negative, "neutral" : neutral}
+    # each_sentence_info_list = []
+    # cnt = 0
+    # for result in results[1:]:
+    #     if cnt == 8:
+    #         break
+    #     each_sentence_info_list.append(result)
+    #     # print(result)
+    #     cnt+=1
+    # if negative > positive or negative > neutral:
+    #     return  {"message":"We are restricting this post since this post contains inappropiate or negative content", "each_sentence_info_list": each_sentence_info_list, "data": True, "positive" : positive, "negative" : negative, "neutral" : neutral}
     
 
     post.created_by = userData.get("email")
@@ -118,7 +118,7 @@ async def create_post(post : PostBaseSchema, user_id: str = Depends(oauth2.requi
 
 
 
-@router.post("/user/post/all", tags=["Post CRUD"])
+@router.get("/user/post/all", tags=["Post CRUD"])
 async def all_post(user_id: str = Depends(oauth2.require_user)):
 
     client = cnct.client
@@ -152,7 +152,7 @@ async def update_post(updated_data : PostUpdateSchema, user_id: str = Depends(oa
     return dict(updated_data)
 
 
-@router.post("/user/post/delete", tags=["Post CRUD"])
+@router.get("/user/post/delete", tags=["Post CRUD"])
 async def delete_post(user_id: str = Depends(oauth2.require_user)):
 
     client = cnct.client
@@ -188,40 +188,40 @@ async def create_post(post : PostBaseSchema, admin_id: str = Depends(oauth2.requ
         return {"status": "No such admin exist!"}
     
 
-    sentences = re.split('(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)(\s|[A-Z].*)', post.content)
-    for s in sentences:
-        if s == ' ':
-            sentences.remove(' ')
+    # sentences = re.split('(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)(\s|[A-Z].*)', post.content)
+    # for s in sentences:
+    #     if s == ' ':
+    #         sentences.remove(' ')
 
         
-    sentiment_results, positive, negative, neutral = analyze_comments(sentences)
-    count = 0
-    results = []
-    sentiment_total = {"Positive" : positive, "Negative" : negative, "Neutral" : neutral}
-    results.append(sentiment_total)
+    # sentiment_results, positive, negative, neutral = analyze_comments(sentences)
+    # count = 0
+    # results = []
+    # sentiment_total = {"Positive" : positive, "Negative" : negative, "Neutral" : neutral}
+    # results.append(sentiment_total)
         
-    for sentence in sentences:
-        result = {}
-        result["sentence"] = sentence
-        result["sentiment"] = sentiment_results[count]["label"]
-        result["score"] = sentiment_results[count]["score"]
-        results.append(result)
-        # print(count)
-        count+=1
-    positive = results[0].get('Positive')
-    negative = results[0].get('Negative')
-    neutral = results[0].get('Neutral')
+    # for sentence in sentences:
+    #     result = {}
+    #     result["sentence"] = sentence
+    #     result["sentiment"] = sentiment_results[count]["label"]
+    #     result["score"] = sentiment_results[count]["score"]
+    #     results.append(result)
+    #     # print(count)
+    #     count+=1
+    # positive = results[0].get('Positive')
+    # negative = results[0].get('Negative')
+    # neutral = results[0].get('Neutral')
         
-    each_sentence_info_list = []
-    cnt = 0
-    for result in results[1:]:
-        if cnt == 8:
-            break
-        each_sentence_info_list.append(result)
-        # print(result)
-        cnt+=1
-    if negative > positive or negative > neutral:
-        return  {"message":"We are restricting this post since this post contains inappropiate or negative content", "each_sentence_info_list": each_sentence_info_list, "data": True, "positive" : positive, "negative" : negative, "neutral" : neutral}
+    # each_sentence_info_list = []
+    # cnt = 0
+    # for result in results[1:]:
+    #     if cnt == 8:
+    #         break
+    #     each_sentence_info_list.append(result)
+    #     # print(result)
+    #     cnt+=1
+    # if negative > positive or negative > neutral:
+    #     return  {"message":"We are restricting this post since this post contains inappropiate or negative content", "each_sentence_info_list": each_sentence_info_list, "data": True, "positive" : positive, "negative" : negative, "neutral" : neutral}
     
 
     post.created_by = adminData.get("email")
@@ -235,7 +235,7 @@ async def create_post(post : PostBaseSchema, admin_id: str = Depends(oauth2.requ
 
 
 
-@router.post("/admin/post/all", tags=["Post CRUD"])
+@router.get("/admin/post/all", tags=["Post CRUD"])
 async def all_post(admin_id: str = Depends(oauth2.require_admin)):
 
     client = cnct.client
@@ -269,7 +269,7 @@ async def update_post(updated_data : PostUpdateSchema, admin_id: str = Depends(o
     return dict(updated_data)
 
 
-@router.post("/admin/post/delete", tags=["Post CRUD"])
+@router.get("/admin/post/delete", tags=["Post CRUD"])
 async def delete_post(admin_id: str = Depends(oauth2.require_admin)):
 
     client = cnct.client
@@ -288,7 +288,7 @@ async def delete_post(admin_id: str = Depends(oauth2.require_admin)):
 
 
 
-@router.post('/user/newsfeed', tags=["News Feed"])
+@router.get('/user/newsfeed', tags=["News Feed"])
 async def newsfeed(user_id: str = Depends(oauth2.require_user)):
     client = cnct.client
     
@@ -301,7 +301,7 @@ async def newsfeed(user_id: str = Depends(oauth2.require_user)):
     return {"status": "success", "posts": json.loads(json_util.dumps(all_post))}
 
 
-@router.post('/admin/newsfeed', tags=["News Feed"])
+@router.get('/admin/newsfeed', tags=["News Feed"])
 async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
     client = cnct.client
     
@@ -321,8 +321,8 @@ async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
 
 
 
-@router.post('/admin/dashboard/users/list/all', tags=["Admin Dashboard"])
-async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
+@router.get('/admin/dashboard/users/list/all', tags=["Admin Dashboard"])
+async def list_all(admin_id: str = Depends(oauth2.require_admin)):
     client = cnct.client
     
     adminData = await client.alumNation_db.admin_collection.find_one({'_id': ObjectId(str(admin_id))})
@@ -333,8 +333,8 @@ async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
     all_post = await all_post.to_list(length=100)
     return {"status": "success", "posts": json.loads(json_util.dumps(all_post))}
 
-@router.post('/admin/dashboard/users/list/alumni', tags=["Admin Dashboard"])
-async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
+@router.get('/admin/dashboard/users/list/alumni', tags=["Admin Dashboard"])
+async def list_alumni(admin_id: str = Depends(oauth2.require_admin)):
     client = cnct.client
     
     adminData = await client.alumNation_db.admin_collection.find_one({'_id': ObjectId(str(admin_id))})
@@ -345,8 +345,8 @@ async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
     all_post = await all_post.to_list(length=100)
     return {"status": "success", "posts": json.loads(json_util.dumps(all_post))}
 
-@router.post('/admin/dashboard/users/list/present_student', tags=["Admin Dashboard"])
-async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
+@router.get('/admin/dashboard/users/list/present_student', tags=["Admin Dashboard"])
+async def lit_present_student(admin_id: str = Depends(oauth2.require_admin)):
     client = cnct.client
     
     adminData = await client.alumNation_db.admin_collection.find_one({'_id': ObjectId(str(admin_id))})
@@ -358,8 +358,8 @@ async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
     return {"status": "success", "posts": json.loads(json_util.dumps(all_post))}
 
 
-@router.post('/admin/dashboard/users/count/all', tags=["Admin Dashboard"])
-async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
+@router.get('/admin/dashboard/users/count/all', tags=["Admin Dashboard"])
+async def count_all(admin_id: str = Depends(oauth2.require_admin)):
     client = cnct.client
     
     adminData = await client.alumNation_db.admin_collection.find_one({'_id': ObjectId(str(admin_id))})
@@ -370,8 +370,8 @@ async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
     return {"status": "success", "total_users": total_users}
 
 
-@router.post('/admin/dashboard/users/count/alumni', tags=["Admin Dashboard"])
-async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
+@router.get('/admin/dashboard/users/count/alumni', tags=["Admin Dashboard"])
+async def count_alumni(admin_id: str = Depends(oauth2.require_admin)):
     client = cnct.client
     
     adminData = await client.alumNation_db.admin_collection.find_one({'_id': ObjectId(str(admin_id))})
@@ -382,8 +382,8 @@ async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
     return {"status": "success", "total_alumni": total_alumni}
 
 
-@router.post('/admin/dashboard/users/count/present_student', tags=["Admin Dashboard"])
-async def newsfeed(admin_id: str = Depends(oauth2.require_admin)):
+@router.get('/admin/dashboard/users/count/present_student', tags=["Admin Dashboard"])
+async def count_present_student(admin_id: str = Depends(oauth2.require_admin)):
     client = cnct.client
     
     adminData = await client.alumNation_db.admin_collection.find_one({'_id': ObjectId(str(admin_id))})
