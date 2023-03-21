@@ -31,12 +31,13 @@ app.include_router(auth.router, tags=['Auth'], prefix='/api/auth')
 app.include_router(profile.router, tags=['Profile'], prefix='/api')
 app.include_router(email.router, tags=['Email'], prefix='/api')
 
-origins = [
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:8000",
-    "http://localhost:3000",
-]
+# origins = [
+#     "http://127.0.0.1:3000",
+#     "http://127.0.0.1:8000",
+#     "http://localhost:3000",
+# ]
 
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
